@@ -28,9 +28,9 @@ func run(args []string) error {
 		"init":   initFile,
 		"add":    add,
 		"reword": reword,
-		"cancel": notImplemented("cancel"),
-		"finish": notImplemented("finish"),
-		"remove": notImplemented("remove"),
+		"cancel": state(cancel),
+		"finish": state(finish),
+		"remove": state(removeOld),
 		"list":   list,
 	}
 	return cmds.run(args[0], args[1:])
