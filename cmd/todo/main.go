@@ -24,7 +24,7 @@ func run(args []string) error {
 		return nil
 	}
 	cmds := commands{
-		"init":   notImplemented("init"),
+		"init":   initFile,
 		"add":    notImplemented("add"),
 		"reword": notImplemented("reword"),
 		"cancel": notImplemented("cancel"),
