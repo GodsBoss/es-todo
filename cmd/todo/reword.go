@@ -6,19 +6,12 @@ import (
 	"fmt"
 )
 
-func reword(args []string) error {
+func toRewordCommand(args []string) (todo.TaskCommand, error) {
 	if len(args) < 2 {
-		return fmt.Errorf("needs ID and task as args")
+		return nil, fmt.Errorf("needs ID and task as args")
 	}
-	events, err := load()
-	if err != nil {
-		return err
-	}
-	(&todo.CommandHandler{
-		Events: events,
-	}).ProcessTaskCommand(todo.RewordTaskCommand{
+	return todo.RewordTaskCommand{
 		ID:          args[0],
 		Description: args[1],
-	})
-	return save(events)
+	}, nil
 }

@@ -26,11 +26,11 @@ func run(args []string) error {
 	}
 	cmds := commands{
 		"init":   initFile,
-		"add":    add,
-		"reword": reword,
-		"cancel": state(cancel),
-		"finish": state(finish),
-		"remove": state(removeOld),
+		"add":    task(toAddCommand),
+		"reword": task(toRewordCommand),
+		"cancel": task(toStateCommand(cancel)),
+		"finish": task(toStateCommand(finish)),
+		"remove": task(toStateCommand(removeOld)),
 		"list":   list,
 	}
 	return cmds.run(args[0], args[1:])

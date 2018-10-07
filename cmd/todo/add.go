@@ -8,16 +8,9 @@ import (
 	"github.com/GodsBoss/es-todo/todo"
 )
 
-func add(args []string) error {
+func toAddCommand(args []string) (todo.TaskCommand, error) {
 	if len(args) == 0 {
-		return fmt.Errorf("missing task")
+		return nil, fmt.Errorf("missing task")
 	}
-	events, err := load()
-	if err != nil {
-		return err
-	}
-	(&todo.CommandHandler{
-		Events: events,
-	}).ProcessTaskCommand(todo.AddTaskCommand{ID: strconv.Itoa(int(time.Now().Unix())), Description: args[0]})
-	return save(events)
+	return todo.AddTaskCommand{ID: strconv.Itoa(int(time.Now().Unix())), Description: args[0]}, nil
 }

@@ -6,19 +6,12 @@ import (
 	"fmt"
 )
 
-func state(idToCommand func(id string) todo.TaskCommand) func([]string) error {
-	return func(args []string) error {
+func toStateCommand(idToCommand func(id string) todo.TaskCommand) func([]string) (todo.TaskCommand, error) {
+	return func(args []string) (todo.TaskCommand, error) {
 		if len(args) == 0 {
-			return fmt.Errorf("missing ID argument")
+			return nil, fmt.Errorf("missing ID argument")
 		}
-		events, err := load()
-		if err != nil {
-			return err
-		}
-		(&todo.CommandHandler{
-			Events: events,
-		}).ProcessTaskCommand(idToCommand(args[0]))
-		return save(events)
+		return idToCommand(args[0]), nil
 	}
 }
 
