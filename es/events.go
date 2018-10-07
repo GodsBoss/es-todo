@@ -33,6 +33,16 @@ type Event struct {
 	payload     []byte
 }
 
+// NewEvent creates a new event.
+func NewEvent(kind string, timestamp time.Time, aggregateID string, payload []byte) Event {
+	return Event{
+		timestamp:   timestamp,
+		aggregateID: aggregateID,
+		kind:        kind,
+		payload:     payload,
+	}
+}
+
 // Timestamp returns the event's timestamp.
 func (event Event) Timestamp() time.Time {
 	return event.timestamp
