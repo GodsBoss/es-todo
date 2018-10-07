@@ -17,3 +17,12 @@ func load() (*es.Events, error) {
 	defer file.Close()
 	return json.FromJSON(file)
 }
+
+func save(events *es.Events) error {
+	file, err := os.Create(filename)
+	if err != nil {
+		return err
+	}
+	defer file.Close()
+	return json.ToJSON(events, file)
+}
