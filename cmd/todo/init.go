@@ -22,5 +22,3 @@ func initFile(_ []string) error {
 	}
 	return fmt.Errorf("already initialized")
 }
-
-const filename = "events.json"
