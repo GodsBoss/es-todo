@@ -31,7 +31,7 @@ func run(args []string) error {
 		"cancel": notImplemented("cancel"),
 		"finish": notImplemented("finish"),
 		"remove": notImplemented("remove"),
-		"list":   notImplemented("list"),
+		"list":   list,
 	}
 	return cmds.run(args[0], args[1:])
 }
