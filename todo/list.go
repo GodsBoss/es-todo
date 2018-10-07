@@ -26,8 +26,8 @@ func (lt ListTask) String() string {
 type Tasks map[string]*ListTask
 
 func (tasks Tasks) Show(output io.Writer) error {
-	for _, task := range tasks {
-		_, err := fmt.Fprintln(output, task)
+	for id, task := range tasks {
+		_, err := fmt.Fprintf(output, "%10s: %s", id, task)
 		if err != nil {
 			return err
 		}
