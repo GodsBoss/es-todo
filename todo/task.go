@@ -23,7 +23,7 @@ func (task *Task) apply(event es.Event) {
 	case eventTaskFinished:
 		task.state = taskStateFinished
 	case eventTaskRemoved:
-		task.state = tasStatekRemoved
+		task.state = taskStateRemoved
 	}
 }
 
@@ -31,7 +31,7 @@ const (
 	taskStateOpen     = "open"
 	taskStateCanceled = "canceled"
 	taskStateFinished = "finished"
-	tasStatekRemoved  = "removed"
+	taskStateRemoved  = "removed"
 )
 
 const (
