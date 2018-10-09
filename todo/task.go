@@ -32,38 +32,65 @@ func (task *Task) apply(event es.Event) {
 func (task *Task) process(command interface{}) []es.Event {
 	switch cmd := command.(type) {
 	case AddTaskCommand:
-		if task.state == taskStateInitial {
-			return []es.Event{
-				es.NewEvent(eventTaskAdded, time.Now(), cmd.ID, []byte(cmd.Description)),
-			}
-		}
+		return task.add(cmd)
 	case RewordTaskCommand:
-		if task.state == taskStateOpen {
-			return []es.Event{
-				es.NewEvent(eventTaskReworded, time.Now(), cmd.ID, []byte(cmd.Description)),
-			}
-		}
+		return task.reword(cmd)
 	case CancelTaskCommand:
-		if task.state == taskStateOpen {
-			return []es.Event{
-				es.NewEvent(eventTaskCanceled, time.Now(), cmd.ID, []byte{}),
-			}
-		}
+		return task.cancel(cmd)
 	case FinishTaskCommand:
-		if task.state == taskStateOpen {
-			return []es.Event{
-				es.NewEvent(eventTaskFinished, time.Now(), cmd.ID, []byte{}),
-			}
-		}
+		return task.finish(cmd)
 	case RemoveOldTaskCommand:
-		if task.state == taskStateCanceled || task.state == taskStateFinished {
-			return []es.Event{
-				es.NewEvent(eventTaskRemoved, time.Now(), cmd.ID, []byte{}),
-			}
-		}
+		return task.remove(cmd)
 	}
 	return make([]es.Event, 0)
 }
+
+func (task *Task) add(cmd AddTaskCommand) []es.Event {
+	if task.state == taskStateInitial {
+		return []es.Event{
+			es.NewEvent(eventTaskAdded, time.Now(), cmd.ID, []byte(cmd.Description)),
+		}
+	}
+	return noEvents
+}
+
+func (task *Task) reword(cmd RewordTaskCommand) []es.Event {
+	if task.state == taskStateOpen {
+		return []es.Event{
+			es.NewEvent(eventTaskReworded, time.Now(), cmd.ID, []byte(cmd.Description)),
+		}
+	}
+	return noEvents
+}
+
+func (task *Task) cancel(cmd CancelTaskCommand) []es.Event {
+	if task.state == taskStateOpen {
+		return []es.Event{
+			es.NewEvent(eventTaskCanceled, time.Now(), cmd.ID, []byte{}),
+		}
+	}
+	return noEvents
+}
+
+func (task *Task) finish(cmd FinishTaskCommand) []es.Event {
+	if task.state == taskStateOpen {
+		return []es.Event{
+			es.NewEvent(eventTaskFinished, time.Now(), cmd.ID, []byte{}),
+		}
+	}
+	return noEvents
+}
+
+func (task *Task) remove(cmd RemoveOldTaskCommand) []es.Event {
+	if task.state == taskStateCanceled || task.state == taskStateFinished {
+		return []es.Event{
+			es.NewEvent(eventTaskRemoved, time.Now(), cmd.ID, []byte{}),
+		}
+	}
+	return noEvents
+}
+
+var noEvents = make([]es.Event, 0)
 
 const (
 	taskStateInitial  = ""
