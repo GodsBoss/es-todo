@@ -31,22 +31,6 @@ func (task *Task) apply(event es.Event) {
 	}
 }
 
-func (task *Task) process(command interface{}) ([]es.Event, error) {
-	switch cmd := command.(type) {
-	case AddTaskCommand:
-		return task.add(cmd)
-	case RewordTaskCommand:
-		return task.reword(cmd)
-	case CancelTaskCommand:
-		return task.cancel(cmd)
-	case FinishTaskCommand:
-		return task.finish(cmd)
-	case RemoveOldTaskCommand:
-		return task.remove(cmd)
-	}
-	return make([]es.Event, 0), fmt.Errorf("unknown command %+v", command)
-}
-
 func (task *Task) add(cmd AddTaskCommand) ([]es.Event, error) {
 	if task.state == taskStateInitial {
 		return []es.Event{

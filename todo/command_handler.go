@@ -11,7 +11,7 @@ func (handler *CommandHandler) ProcessTaskCommand(command TaskCommand) error {
 	if err != nil {
 		return err
 	}
-	newEvents, err := task.process(command)
+	newEvents, err := command.Execute(task)
 	if err != nil {
 		return err
 	}
@@ -44,4 +44,5 @@ var _ EventStore = &es.Events{}
 
 type TaskCommand interface {
 	AggregateID() string
+	Execute(*Task) ([]es.Event, error)
 }
