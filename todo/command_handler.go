@@ -11,8 +11,9 @@ func (handler *CommandHandler) ProcessTaskCommand(command TaskCommand) {
 	for _, event := range handler.Events.Fetch(es.ByAggregateID(command.AggregateID())) {
 		task.apply(event)
 	}
-	for _, event := range task.process(command) {
-		handler.Events.Append(event)
+	newEvents := task.process(command)
+	for i := range newEvents {
+		handler.Events.Append(newEvents[i])
 	}
 }
 
