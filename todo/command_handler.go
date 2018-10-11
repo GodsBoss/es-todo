@@ -21,7 +21,7 @@ func (handler *CommandHandler) ProcessTaskCommand(command TaskCommand) error {
 
 // EventStore abstracts the event store.
 type EventStore interface {
-	Append(event ...es.Event)
+	Append(event ...es.Event) error
 	Fetch(filter es.EventFilter) []es.Event
 }
 
