@@ -6,7 +6,7 @@ import (
 	"fmt"
 )
 
-func toRewordCommand(args []string) (todo.TaskCommand, error) {
+func toRewordCommand(args []string) (todo.Command, error) {
 	if len(args) < 2 {
 		return nil, fmt.Errorf("needs ID and task as args")
 	}

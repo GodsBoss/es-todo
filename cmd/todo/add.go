@@ -8,7 +8,7 @@ import (
 	"github.com/GodsBoss/es-todo/todo"
 )
 
-func toAddCommand(args []string) (todo.TaskCommand, error) {
+func toAddCommand(args []string) (todo.Command, error) {
 	if len(args) == 0 {
 		return nil, fmt.Errorf("missing task")
 	}

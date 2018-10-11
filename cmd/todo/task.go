@@ -4,7 +4,7 @@ import (
 	"github.com/GodsBoss/es-todo/todo"
 )
 
-func task(argsToCommand func([]string) (todo.TaskCommand, error)) func([]string) error {
+func task(argsToCommand func([]string) (todo.Command, error)) func([]string) error {
 	return func(args []string) error {
 		cmd, err := argsToCommand(args)
 		if err != nil {

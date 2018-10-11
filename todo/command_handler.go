@@ -6,7 +6,7 @@ type CommandHandler struct {
 	Events EventStore
 }
 
-func (handler *CommandHandler) ProcessTaskCommand(command TaskCommand) error {
+func (handler *CommandHandler) ProcessTaskCommand(command Command) error {
 	newEvents, err := command.Execute(handler.Events)
 	if err != nil {
 		return err
@@ -38,6 +38,6 @@ type EventStore interface {
 
 var _ EventStore = &es.Events{}
 
-type TaskCommand interface {
+type Command interface {
 	Execute(EventFetcher) ([]es.Event, error)
 }

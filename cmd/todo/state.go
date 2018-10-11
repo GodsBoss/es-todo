@@ -6,8 +6,8 @@ import (
 	"fmt"
 )
 
-func toStateCommand(idToCommand func(id string) todo.TaskCommand) func([]string) (todo.TaskCommand, error) {
-	return func(args []string) (todo.TaskCommand, error) {
+func toStateCommand(idToCommand func(id string) todo.Command) func([]string) (todo.Command, error) {
+	return func(args []string) (todo.Command, error) {
 		if len(args) == 0 {
 			return nil, fmt.Errorf("missing ID argument")
 		}
@@ -15,19 +15,19 @@ func toStateCommand(idToCommand func(id string) todo.TaskCommand) func([]string)
 	}
 }
 
-func cancel(id string) todo.TaskCommand {
+func cancel(id string) todo.Command {
 	return todo.CancelTaskCommand{
 		ID: id,
 	}
 }
 
-func finish(id string) todo.TaskCommand {
+func finish(id string) todo.Command {
 	return todo.FinishTaskCommand{
 		ID: id,
 	}
 }
 
-func removeOld(id string) todo.TaskCommand {
+func removeOld(id string) todo.Command {
 	return todo.RemoveOldTaskCommand{
 		ID: id,
 	}
