@@ -6,15 +6,19 @@ type CommandHandler struct {
 	Events Events
 }
 
-func (handler *CommandHandler) ProcessTaskCommand(command TaskCommand) {
+func (handler *CommandHandler) ProcessTaskCommand(command TaskCommand) error {
 	task := &Task{}
 	for _, event := range handler.Events.Fetch(es.ByAggregateID(command.AggregateID())) {
 		task.apply(event)
 	}
-	newEvents := task.process(command)
+	newEvents, err := task.process(command)
+	if err != nil {
+		return err
+	}
 	for i := range newEvents {
 		handler.Events.Append(newEvents[i])
 	}
+	return nil
 }
 
 // Events abstracts the event store.

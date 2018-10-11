@@ -1,6 +1,8 @@
 package todo
 
 import (
+	"fmt"
+
 	"github.com/GodsBoss/es-todo/es"
 
 	"time"
@@ -29,7 +31,7 @@ func (task *Task) apply(event es.Event) {
 	}
 }
 
-func (task *Task) process(command interface{}) []es.Event {
+func (task *Task) process(command interface{}) ([]es.Event, error) {
 	switch cmd := command.(type) {
 	case AddTaskCommand:
 		return task.add(cmd)
@@ -42,52 +44,52 @@ func (task *Task) process(command interface{}) []es.Event {
 	case RemoveOldTaskCommand:
 		return task.remove(cmd)
 	}
-	return make([]es.Event, 0)
+	return make([]es.Event, 0), fmt.Errorf("unknown command %+v", command)
 }
 
-func (task *Task) add(cmd AddTaskCommand) []es.Event {
+func (task *Task) add(cmd AddTaskCommand) ([]es.Event, error) {
 	if task.state == taskStateInitial {
 		return []es.Event{
 			es.NewEvent(eventTaskAdded, time.Now(), cmd.ID, []byte(cmd.Description)),
-		}
+		}, nil
 	}
-	return noEvents
+	return noEvents, fmt.Errorf("task already exists")
 }
 
-func (task *Task) reword(cmd RewordTaskCommand) []es.Event {
+func (task *Task) reword(cmd RewordTaskCommand) ([]es.Event, error) {
 	if task.state == taskStateOpen {
 		return []es.Event{
 			es.NewEvent(eventTaskReworded, time.Now(), cmd.ID, []byte(cmd.Description)),
-		}
+		}, nil
 	}
-	return noEvents
+	return noEvents, fmt.Errorf("task must be open to be reworded")
 }
 
-func (task *Task) cancel(cmd CancelTaskCommand) []es.Event {
+func (task *Task) cancel(cmd CancelTaskCommand) ([]es.Event, error) {
 	if task.state == taskStateOpen {
 		return []es.Event{
 			es.NewEvent(eventTaskCanceled, time.Now(), cmd.ID, []byte{}),
-		}
+		}, nil
 	}
-	return noEvents
+	return noEvents, fmt.Errorf("task must be open to be canceled")
 }
 
-func (task *Task) finish(cmd FinishTaskCommand) []es.Event {
+func (task *Task) finish(cmd FinishTaskCommand) ([]es.Event, error) {
 	if task.state == taskStateOpen {
 		return []es.Event{
 			es.NewEvent(eventTaskFinished, time.Now(), cmd.ID, []byte{}),
-		}
+		}, nil
 	}
-	return noEvents
+	return noEvents, fmt.Errorf("task must be open to be finished")
 }
 
-func (task *Task) remove(cmd RemoveOldTaskCommand) []es.Event {
+func (task *Task) remove(cmd RemoveOldTaskCommand) ([]es.Event, error) {
 	if task.state == taskStateCanceled || task.state == taskStateFinished {
 		return []es.Event{
 			es.NewEvent(eventTaskRemoved, time.Now(), cmd.ID, []byte{}),
-		}
+		}, nil
 	}
-	return noEvents
+	return noEvents, fmt.Errorf("task must be closed to be removed")
 }
 
 var noEvents = make([]es.Event, 0)
