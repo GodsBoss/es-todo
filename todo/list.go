@@ -35,7 +35,7 @@ func (tasks Tasks) Show(output io.Writer) error {
 	return nil
 }
 
-func ListTasks(events Events) Tasks {
+func ListTasks(events EventStore) Tasks {
 	tasks := make(Tasks)
 	for _, event := range events.Fetch(es.All()) {
 		switch event.Kind() {

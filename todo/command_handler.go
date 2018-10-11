@@ -3,7 +3,7 @@ package todo
 import "github.com/GodsBoss/es-todo/es"
 
 type CommandHandler struct {
-	Events Events
+	Events EventStore
 }
 
 func (handler *CommandHandler) ProcessTaskCommand(command TaskCommand) error {
@@ -21,13 +21,13 @@ func (handler *CommandHandler) ProcessTaskCommand(command TaskCommand) error {
 	return nil
 }
 
-// Events abstracts the event store.
-type Events interface {
+// EventStore abstracts the event store.
+type EventStore interface {
 	Append(event es.Event)
 	Fetch(filter es.EventFilter) []es.Event
 }
 
-var _ Events = &es.Events{}
+var _ EventStore = &es.Events{}
 
 type TaskCommand interface {
 	AggregateID() string
