@@ -7,19 +7,19 @@ import (
 )
 
 type EventStore struct {
-	byteStore ByteStore
+	blobStore BlobStore
 	converter Converter
 	events    []es.Event
 }
 
-func NewEventStore(byteStore ByteStore, converter Converter) *EventStore {
+func NewEventStore(blobStore BlobStore, converter Converter) *EventStore {
 	return &EventStore{
-		byteStore: byteStore,
+		blobStore: blobStore,
 		converter: converter,
 	}
 }
 
-type ByteStore interface {
+type BlobStore interface {
 	// Load returns a store blob previously stored. If data was never stored, the ByteStore must return an error created with NewNotFoundError().
 	Load() ([]byte, error)
 
@@ -52,7 +52,7 @@ func IsNotFoundError(err error) bool {
 }
 
 func (store *EventStore) Init() error {
-	_, err := store.byteStore.Load()
+	_, err := store.blobStore.Load()
 	if err == nil {
 		return fmt.Errorf("event store already initialized")
 	}
@@ -88,7 +88,7 @@ func (store *EventStore) save() error {
 	if err != nil {
 		return err
 	}
-	return store.byteStore.Save(data)
+	return store.blobStore.Save(data)
 }
 
 // load loads all events found in the byte store, but only if not loaded yet.
@@ -96,7 +96,7 @@ func (store *EventStore) load() error {
 	if store.events != nil {
 		return nil
 	}
-	data, err := store.byteStore.Load()
+	data, err := store.blobStore.Load()
 	if err != nil {
 		return err
 	}
