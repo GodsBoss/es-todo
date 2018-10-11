@@ -77,7 +77,9 @@ func (store *EventStore) Fetch(filter es.EventFilter) ([]es.Event, error) {
 	}
 	events := make([]es.Event, 0)
 	for i := range store.events {
-		events = append(events, store.events[i])
+		if filter(store.events[i]) {
+			events = append(events, store.events[i])
+		}
 	}
 	return events, nil
 }
