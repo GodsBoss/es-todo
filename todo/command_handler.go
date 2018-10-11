@@ -15,15 +15,13 @@ func (handler *CommandHandler) ProcessTaskCommand(command TaskCommand) error {
 	if err != nil {
 		return err
 	}
-	for i := range newEvents {
-		handler.Events.Append(newEvents[i])
-	}
+	handler.Events.Append(newEvents...)
 	return nil
 }
 
 // EventStore abstracts the event store.
 type EventStore interface {
-	Append(event es.Event)
+	Append(event ...es.Event)
 	Fetch(filter es.EventFilter) []es.Event
 }
 

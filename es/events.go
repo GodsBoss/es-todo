@@ -10,8 +10,8 @@ type Events struct {
 }
 
 // Append adds an event.
-func (events *Events) Append(event Event) {
-	events.list = append(events.list, event)
+func (events *Events) Append(evs ...Event) {
+	events.list = append(events.list, evs...)
 }
 
 // Fetch returns all events matching the filter.
