@@ -9,6 +9,10 @@ import (
 
 type JSONConverter struct{}
 
+func NewJSONConverter() *JSONConverter {
+	return &JSONConverter{}
+}
+
 func (converter *JSONConverter) Marshal(events []es.Event) ([]byte, error) {
 	jsonEvents := make([]jsonEvent, len(events))
 	for i := range events {
