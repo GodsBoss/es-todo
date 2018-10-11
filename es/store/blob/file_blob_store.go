@@ -6,6 +6,10 @@ import (
 
 type FileBlobStore string
 
+func NewFileBlobStore(filename string) FileBlobStore {
+	return FileBlobStore(filename)
+}
+
 func (store FileBlobStore) Load() ([]byte, error) {
 	return ioutil.ReadFile(string(store))
 }
