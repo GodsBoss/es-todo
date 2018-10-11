@@ -12,6 +12,8 @@ type EventStore struct {
 	events    []es.Event
 }
 
+var _ es.EventStore = &EventStore{}
+
 func NewEventStore(blobStore BlobStore, converter Converter) *EventStore {
 	return &EventStore{
 		blobStore: blobStore,
