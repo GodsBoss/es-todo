@@ -16,18 +16,6 @@ func (handler *CommandHandler) ProcessCommand(command Command) error {
 	return handler.Events.Append(newEvents...)
 }
 
-func loadTask(fetcher EventFetcher, id string) (*Task, error) {
-	pastEvents, err := fetcher.Fetch(es.ByAggregateID(id))
-	if err != nil {
-		return nil, err
-	}
-	task := &Task{}
-	for i := range pastEvents {
-		task.apply(pastEvents[i])
-	}
-	return task, nil
-}
-
 type EventFetcher interface {
 	Fetch(filter es.EventFilter) ([]es.Event, error)
 }

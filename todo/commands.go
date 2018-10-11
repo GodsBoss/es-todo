@@ -70,3 +70,15 @@ func (cmd RemoveOldTaskCommand) Execute(fetcher EventFetcher) ([]es.Event, error
 	}
 	return task.remove(cmd)
 }
+
+func loadTask(fetcher EventFetcher, id string) (*Task, error) {
+	pastEvents, err := fetcher.Fetch(es.ByAggregateID(id))
+	if err != nil {
+		return nil, err
+	}
+	task := &Task{}
+	for i := range pastEvents {
+		task.apply(pastEvents[i])
+	}
+	return task, nil
+}
