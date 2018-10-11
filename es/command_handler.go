@@ -4,6 +4,12 @@ type CommandHandler struct {
 	Events EventStore
 }
 
+func NewCommandHandler(events EventStore) *CommandHandler {
+	return &CommandHandler{
+		Events: events,
+	}
+}
+
 func (handler *CommandHandler) ProcessCommand(command Command) error {
 	newEvents, err := command.Execute(handler.Events)
 	if err != nil {

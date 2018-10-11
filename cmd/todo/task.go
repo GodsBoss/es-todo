@@ -14,9 +14,7 @@ func task(argsToCommand func([]string) (es.Command, error)) func([]string) error
 		if err != nil {
 			return err
 		}
-		err = (&es.CommandHandler{
-			Events: events,
-		}).ProcessCommand(cmd)
+		err = es.NewCommandHandler(events).ProcessCommand(cmd)
 		if err != nil {
 			return err
 		}
