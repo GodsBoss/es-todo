@@ -16,7 +16,7 @@ func task(argsToCommand func([]string) (todo.Command, error)) func([]string) err
 		}
 		err = (&todo.CommandHandler{
 			Events: events,
-		}).ProcessTaskCommand(cmd)
+		}).ProcessCommand(cmd)
 		if err != nil {
 			return err
 		}

@@ -6,7 +6,7 @@ type CommandHandler struct {
 	Events EventStore
 }
 
-func (handler *CommandHandler) ProcessTaskCommand(command Command) error {
+func (handler *CommandHandler) ProcessCommand(command Command) error {
 	newEvents, err := command.Execute(handler.Events)
 	if err != nil {
 		return err
