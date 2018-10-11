@@ -7,9 +7,5 @@ import (
 )
 
 func list(_ []string) error {
-	events, err := load()
-	if err != nil {
-		return err
-	}
-	return todo.ListTasks(events).Show(os.Stdout)
+	return todo.ListTasks(eventStore()).Show(os.Stdout)
 }

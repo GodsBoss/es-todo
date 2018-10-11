@@ -10,14 +10,10 @@ func task(argsToCommand func([]string) (es.Command, error)) func([]string) error
 		if err != nil {
 			return err
 		}
-		events, err := load()
+		err = es.NewCommandHandler(eventStore()).ProcessCommand(cmd)
 		if err != nil {
 			return err
 		}
-		err = es.NewCommandHandler(events).ProcessCommand(cmd)
-		if err != nil {
-			return err
-		}
-		return save(events)
+		return nil
 	}
 }

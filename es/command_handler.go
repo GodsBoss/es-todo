@@ -39,8 +39,6 @@ type EventStore interface {
 	Fetch(filter EventFilter) ([]Event, error)
 }
 
-var _ EventStore = &Events{}
-
 type Command interface {
 	Execute(EventFetcher) ([]Event, error)
 }

@@ -4,28 +4,6 @@ import (
 	"time"
 )
 
-// Events contains all events that happened.
-type Events struct {
-	list []Event
-}
-
-// Append adds an event.
-func (events *Events) Append(evs ...Event) error {
-	events.list = append(events.list, evs...)
-	return nil
-}
-
-// Fetch returns all events matching the filter.
-func (events *Events) Fetch(filter EventFilter) ([]Event, error) {
-	filtered := make([]Event, 0)
-	for i := range events.list {
-		if filter(events.list[i]) {
-			filtered = append(filtered, events.list[i])
-		}
-	}
-	return filtered, nil
-}
-
 // Event is an event that already happened.
 type Event struct {
 	timestamp   time.Time
