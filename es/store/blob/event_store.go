@@ -1,4 +1,4 @@
-package json
+package blob
 
 import (
 	"encoding/json"
