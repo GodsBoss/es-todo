@@ -7,9 +7,13 @@ type CommandHandler struct {
 }
 
 func (handler *CommandHandler) ProcessTaskCommand(command TaskCommand) error {
+	pastEvents, err := handler.Events.Fetch(es.ByAggregateID(command.AggregateID()))
+	if err != nil {
+		return err
+	}
 	task := &Task{}
-	for _, event := range handler.Events.Fetch(es.ByAggregateID(command.AggregateID())) {
-		task.apply(event)
+	for i := range pastEvents {
+		task.apply(pastEvents[i])
 	}
 	newEvents, err := task.process(command)
 	if err != nil {
@@ -22,7 +26,7 @@ func (handler *CommandHandler) ProcessTaskCommand(command TaskCommand) error {
 // EventStore abstracts the event store.
 type EventStore interface {
 	Append(event ...es.Event) error
-	Fetch(filter es.EventFilter) []es.Event
+	Fetch(filter es.EventFilter) ([]es.Event, error)
 }
 
 var _ EventStore = &es.Events{}

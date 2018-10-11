@@ -9,7 +9,10 @@ import (
 )
 
 func ToJSON(source *es.Events, output io.Writer) error {
-	events := source.Fetch(es.All())
+	events, err := source.Fetch(es.All())
+	if err != nil {
+		return err
+	}
 	jsonEvents := make([]Event, len(events))
 	for i := range events {
 		jsonEvents[i] = Event{

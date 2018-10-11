@@ -37,7 +37,9 @@ func (tasks Tasks) Show(output io.Writer) error {
 
 func ListTasks(events EventStore) Tasks {
 	tasks := make(Tasks)
-	for _, event := range events.Fetch(es.All()) {
+	evs, _ := events.Fetch(es.All())
+	for i := range evs {
+		event := evs[i]
 		switch event.Kind() {
 		case eventTaskAdded:
 			tasks[event.AggregateID()] = &ListTask{

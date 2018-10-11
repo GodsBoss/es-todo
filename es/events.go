@@ -16,14 +16,14 @@ func (events *Events) Append(evs ...Event) error {
 }
 
 // Fetch returns all events matching the filter.
-func (events *Events) Fetch(filter EventFilter) []Event {
+func (events *Events) Fetch(filter EventFilter) ([]Event, error) {
 	filtered := make([]Event, 0)
 	for i := range events.list {
 		if filter(events.list[i]) {
 			filtered = append(filtered, events.list[i])
 		}
 	}
-	return filtered
+	return filtered, nil
 }
 
 // Event is an event that already happened.
