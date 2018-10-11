@@ -10,7 +10,7 @@ type AddTaskCommand struct {
 	Description string
 }
 
-func (cmd AddTaskCommand) Execute(fetcher EventFetcher) ([]es.Event, error) {
+func (cmd AddTaskCommand) Execute(fetcher es.EventFetcher) ([]es.Event, error) {
 	task, err := loadTask(fetcher, cmd.ID)
 	if err != nil {
 		return nil, err
@@ -24,7 +24,7 @@ type RewordTaskCommand struct {
 	Description string
 }
 
-func (cmd RewordTaskCommand) Execute(fetcher EventFetcher) ([]es.Event, error) {
+func (cmd RewordTaskCommand) Execute(fetcher es.EventFetcher) ([]es.Event, error) {
 	task, err := loadTask(fetcher, cmd.ID)
 	if err != nil {
 		return nil, err
@@ -37,7 +37,7 @@ type CancelTaskCommand struct {
 	ID string
 }
 
-func (cmd CancelTaskCommand) Execute(fetcher EventFetcher) ([]es.Event, error) {
+func (cmd CancelTaskCommand) Execute(fetcher es.EventFetcher) ([]es.Event, error) {
 	task, err := loadTask(fetcher, cmd.ID)
 	if err != nil {
 		return nil, err
@@ -50,7 +50,7 @@ type FinishTaskCommand struct {
 	ID string
 }
 
-func (cmd FinishTaskCommand) Execute(fetcher EventFetcher) ([]es.Event, error) {
+func (cmd FinishTaskCommand) Execute(fetcher es.EventFetcher) ([]es.Event, error) {
 	task, err := loadTask(fetcher, cmd.ID)
 	if err != nil {
 		return nil, err
@@ -63,7 +63,7 @@ type RemoveOldTaskCommand struct {
 	ID string
 }
 
-func (cmd RemoveOldTaskCommand) Execute(fetcher EventFetcher) ([]es.Event, error) {
+func (cmd RemoveOldTaskCommand) Execute(fetcher es.EventFetcher) ([]es.Event, error) {
 	task, err := loadTask(fetcher, cmd.ID)
 	if err != nil {
 		return nil, err
@@ -71,7 +71,7 @@ func (cmd RemoveOldTaskCommand) Execute(fetcher EventFetcher) ([]es.Event, error
 	return task.remove(cmd)
 }
 
-func loadTask(fetcher EventFetcher, id string) (*Task, error) {
+func loadTask(fetcher es.EventFetcher, id string) (*Task, error) {
 	pastEvents, err := fetcher.Fetch(es.ByAggregateID(id))
 	if err != nil {
 		return nil, err

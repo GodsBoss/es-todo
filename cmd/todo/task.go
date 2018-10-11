@@ -1,10 +1,10 @@
 package main
 
 import (
-	"github.com/GodsBoss/es-todo/todo"
+	"github.com/GodsBoss/es-todo/es"
 )
 
-func task(argsToCommand func([]string) (todo.Command, error)) func([]string) error {
+func task(argsToCommand func([]string) (es.Command, error)) func([]string) error {
 	return func(args []string) error {
 		cmd, err := argsToCommand(args)
 		if err != nil {
@@ -14,7 +14,7 @@ func task(argsToCommand func([]string) (todo.Command, error)) func([]string) err
 		if err != nil {
 			return err
 		}
-		err = (&todo.CommandHandler{
+		err = (&es.CommandHandler{
 			Events: events,
 		}).ProcessCommand(cmd)
 		if err != nil {

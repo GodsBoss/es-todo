@@ -1,13 +1,14 @@
 package main
 
 import (
+	"github.com/GodsBoss/es-todo/es"
 	"github.com/GodsBoss/es-todo/todo"
 
 	"fmt"
 )
 
-func toStateCommand(idToCommand func(id string) todo.Command) func([]string) (todo.Command, error) {
-	return func(args []string) (todo.Command, error) {
+func toStateCommand(idToCommand func(id string) es.Command) func([]string) (es.Command, error) {
+	return func(args []string) (es.Command, error) {
 		if len(args) == 0 {
 			return nil, fmt.Errorf("missing ID argument")
 		}
@@ -15,19 +16,19 @@ func toStateCommand(idToCommand func(id string) todo.Command) func([]string) (to
 	}
 }
 
-func cancel(id string) todo.Command {
+func cancel(id string) es.Command {
 	return todo.CancelTaskCommand{
 		ID: id,
 	}
 }
 
-func finish(id string) todo.Command {
+func finish(id string) es.Command {
 	return todo.FinishTaskCommand{
 		ID: id,
 	}
 }
 
-func removeOld(id string) todo.Command {
+func removeOld(id string) es.Command {
 	return todo.RemoveOldTaskCommand{
 		ID: id,
 	}

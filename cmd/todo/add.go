@@ -1,6 +1,7 @@
 package main
 
 import (
+	"github.com/GodsBoss/es-todo/es"
 	"github.com/GodsBoss/es-todo/todo"
 
 	"fmt"
@@ -8,7 +9,7 @@ import (
 	"time"
 )
 
-func toAddCommand(args []string) (todo.Command, error) {
+func toAddCommand(args []string) (es.Command, error) {
 	if len(args) == 0 {
 		return nil, fmt.Errorf("missing task")
 	}

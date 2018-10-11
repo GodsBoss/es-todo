@@ -1,8 +1,4 @@
-package todo
-
-import (
-	"github.com/GodsBoss/es-todo/es"
-)
+package es
 
 type CommandHandler struct {
 	Events EventStore
@@ -17,17 +13,17 @@ func (handler *CommandHandler) ProcessCommand(command Command) error {
 }
 
 type EventFetcher interface {
-	Fetch(filter es.EventFilter) ([]es.Event, error)
+	Fetch(filter EventFilter) ([]Event, error)
 }
 
 // EventStore abstracts the event store.
 type EventStore interface {
-	Append(event ...es.Event) error
-	Fetch(filter es.EventFilter) ([]es.Event, error)
+	Append(event ...Event) error
+	Fetch(filter EventFilter) ([]Event, error)
 }
 
-var _ EventStore = &es.Events{}
+var _ EventStore = &Events{}
 
 type Command interface {
-	Execute(EventFetcher) ([]es.Event, error)
+	Execute(EventFetcher) ([]Event, error)
 }
