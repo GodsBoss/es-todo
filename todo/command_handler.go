@@ -1,6 +1,8 @@
 package todo
 
-import "github.com/GodsBoss/es-todo/es"
+import (
+	"github.com/GodsBoss/es-todo/es"
+)
 
 type CommandHandler struct {
 	Events EventStore

@@ -1,11 +1,11 @@
 package main
 
 import (
+	"github.com/GodsBoss/es-todo/todo"
+
 	"fmt"
 	"strconv"
 	"time"
-
-	"github.com/GodsBoss/es-todo/todo"
 )
 
 func toAddCommand(args []string) (todo.Command, error) {
