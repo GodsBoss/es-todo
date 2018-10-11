@@ -1,16 +1,20 @@
 package es
 
-type CommandHandler struct {
+type CommandHandler interface {
+	ProcessCommand(command Command) error
+}
+
+type commandHandler struct {
 	Events EventStore
 }
 
-func NewCommandHandler(events EventStore) *CommandHandler {
-	return &CommandHandler{
+func NewCommandHandler(events EventStore) CommandHandler {
+	return &commandHandler{
 		Events: events,
 	}
 }
 
-func (handler *CommandHandler) ProcessCommand(command Command) error {
+func (handler *commandHandler) ProcessCommand(command Command) error {
 	newEvents, err := command.Execute(handler.Events)
 	if err != nil {
 		return err
