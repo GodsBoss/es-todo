@@ -1,11 +1,16 @@
 package es
 
+import (
+	"sync"
+)
+
 type CommandHandler interface {
 	ProcessCommand(command Command) error
 }
 
 type commandHandler struct {
 	Events EventStore
+	mtx    sync.Mutex
 }
 
 func NewCommandHandler(events EventStore) CommandHandler {
@@ -15,6 +20,8 @@ func NewCommandHandler(events EventStore) CommandHandler {
 }
 
 func (handler *commandHandler) ProcessCommand(command Command) error {
+	handler.mtx.Lock()
+	defer handler.mtx.Unlock()
 	newEvents, err := command.Execute(handler.Events)
 	if err != nil {
 		return err
