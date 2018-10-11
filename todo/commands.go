@@ -10,11 +10,11 @@ type AddTaskCommand struct {
 	Description string
 }
 
-func (cmd AddTaskCommand) AggregateID() string {
-	return cmd.ID
-}
-
-func (cmd AddTaskCommand) Execute(task *Task) ([]es.Event, error) {
+func (cmd AddTaskCommand) Execute(fetcher EventFetcher) ([]es.Event, error) {
+	task, err := loadTask(fetcher, cmd.ID)
+	if err != nil {
+		return nil, err
+	}
 	return task.add(cmd)
 }
 
@@ -24,11 +24,11 @@ type RewordTaskCommand struct {
 	Description string
 }
 
-func (cmd RewordTaskCommand) AggregateID() string {
-	return cmd.ID
-}
-
-func (cmd RewordTaskCommand) Execute(task *Task) ([]es.Event, error) {
+func (cmd RewordTaskCommand) Execute(fetcher EventFetcher) ([]es.Event, error) {
+	task, err := loadTask(fetcher, cmd.ID)
+	if err != nil {
+		return nil, err
+	}
 	return task.reword(cmd)
 }
 
@@ -37,11 +37,11 @@ type CancelTaskCommand struct {
 	ID string
 }
 
-func (cmd CancelTaskCommand) AggregateID() string {
-	return cmd.ID
-}
-
-func (cmd CancelTaskCommand) Execute(task *Task) ([]es.Event, error) {
+func (cmd CancelTaskCommand) Execute(fetcher EventFetcher) ([]es.Event, error) {
+	task, err := loadTask(fetcher, cmd.ID)
+	if err != nil {
+		return nil, err
+	}
 	return task.cancel(cmd)
 }
 
@@ -50,11 +50,11 @@ type FinishTaskCommand struct {
 	ID string
 }
 
-func (cmd FinishTaskCommand) AggregateID() string {
-	return cmd.ID
-}
-
-func (cmd FinishTaskCommand) Execute(task *Task) ([]es.Event, error) {
+func (cmd FinishTaskCommand) Execute(fetcher EventFetcher) ([]es.Event, error) {
+	task, err := loadTask(fetcher, cmd.ID)
+	if err != nil {
+		return nil, err
+	}
 	return task.finish(cmd)
 }
 
@@ -63,10 +63,10 @@ type RemoveOldTaskCommand struct {
 	ID string
 }
 
-func (cmd RemoveOldTaskCommand) AggregateID() string {
-	return cmd.ID
-}
-
-func (cmd RemoveOldTaskCommand) Execute(task *Task) ([]es.Event, error) {
+func (cmd RemoveOldTaskCommand) Execute(fetcher EventFetcher) ([]es.Event, error) {
+	task, err := loadTask(fetcher, cmd.ID)
+	if err != nil {
+		return nil, err
+	}
 	return task.remove(cmd)
 }

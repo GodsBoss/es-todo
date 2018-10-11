@@ -7,11 +7,7 @@ type CommandHandler struct {
 }
 
 func (handler *CommandHandler) ProcessTaskCommand(command TaskCommand) error {
-	task, err := loadTask(handler.Events, command.AggregateID())
-	if err != nil {
-		return err
-	}
-	newEvents, err := command.Execute(task)
+	newEvents, err := command.Execute(handler.Events)
 	if err != nil {
 		return err
 	}
@@ -43,6 +39,5 @@ type EventStore interface {
 var _ EventStore = &es.Events{}
 
 type TaskCommand interface {
-	AggregateID() string
-	Execute(*Task) ([]es.Event, error)
+	Execute(EventFetcher) ([]es.Event, error)
 }
