@@ -15,8 +15,7 @@ func (handler *CommandHandler) ProcessTaskCommand(command TaskCommand) error {
 	if err != nil {
 		return err
 	}
-	handler.Events.Append(newEvents...)
-	return nil
+	return handler.Events.Append(newEvents...)
 }
 
 func loadTask(fetcher EventFetcher, id string) (*Task, error) {
