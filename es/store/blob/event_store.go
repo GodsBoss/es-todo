@@ -1,9 +1,9 @@
 package blob
 
 import (
-	"fmt"
-
 	"github.com/GodsBoss/es-todo/es"
+
+	"fmt"
 )
 
 type EventStore struct {
