@@ -1,7 +1,6 @@
 package blob
 
 import (
-	"encoding/json"
 	"fmt"
 
 	"github.com/GodsBoss/es-todo/es"
@@ -9,12 +8,14 @@ import (
 
 type EventStore struct {
 	byteStore ByteStore
+	converter Converter
 	events    []es.Event
 }
 
-func NewEventStore(byteStore ByteStore) *EventStore {
+func NewEventStore(byteStore ByteStore, converter Converter) *EventStore {
 	return &EventStore{
 		byteStore: byteStore,
+		converter: converter,
 	}
 }
 
@@ -24,6 +25,11 @@ type ByteStore interface {
 
 	// Save stores the events of the EventStore in the byte store.
 	Save([]byte) error
+}
+
+type Converter interface {
+	Marshal([]es.Event) ([]byte, error)
+	Unmarshal([]byte) ([]es.Event, error)
 }
 
 type notFoundError struct {
@@ -78,7 +84,7 @@ func (store *EventStore) Fetch(filter es.EventFilter) ([]es.Event, error) {
 
 // save stores all events of the event store in the byte store.
 func (store *EventStore) save() error {
-	data, err := json.Marshal(store.events)
+	data, err := store.converter.Marshal(store.events)
 	if err != nil {
 		return err
 	}
@@ -94,8 +100,7 @@ func (store *EventStore) load() error {
 	if err != nil {
 		return err
 	}
-	events := make([]es.Event, 0)
-	err = json.Unmarshal(data, &events)
+	events, err := store.converter.Unmarshal(data)
 	if err != nil {
 		return err
 	}
