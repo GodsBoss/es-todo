@@ -22,7 +22,7 @@ func NewCommandHandler(events EventStore) CommandHandler {
 func (handler *commandHandler) ProcessCommand(command Command) error {
 	handler.mtx.Lock()
 	defer handler.mtx.Unlock()
-	newEvents, err := command.Execute(handler.Events)
+	newEvents, err := command.Execute(eventFetcherGuard(handler.Events.Fetch))
 	if err != nil {
 		return err
 	}
@@ -31,6 +31,12 @@ func (handler *commandHandler) ProcessCommand(command Command) error {
 
 type EventFetcher interface {
 	Fetch(filter EventFilter) ([]Event, error)
+}
+
+type eventFetcherGuard func(EventFilter) ([]Event, error)
+
+func (f eventFetcherGuard) Fetch(filter EventFilter) ([]Event, error) {
+	return f(filter)
 }
 
 // EventStore abstracts the event store.
