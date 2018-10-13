@@ -35,8 +35,9 @@ type EventFetcher interface {
 
 // EventStore abstracts the event store.
 type EventStore interface {
+	EventFetcher
+
 	Append(event ...Event) error
-	Fetch(filter EventFilter) ([]Event, error)
 }
 
 type Command interface {
